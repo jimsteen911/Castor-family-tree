@@ -1,112 +1,30 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The Castor Family Tree</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=IM+Fell+English:ital@0;1&family=Pinyon+Script&display=swap" rel="stylesheet">
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#241a13"><meta name="description" content="Explore the Castor family history from Switzerland to Pennsylvania, New Jersey and beyond.">
+<title>The Castor Family Atlas | An Interactive Genealogy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=IM+Fell+English:ital@0;1&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
-</head>
-<body>
-<header>
-  <div class="fleuron">&#10086; &#10086; &#10086;</div>
-  <h1>The Castor Family</h1>
-  <p class="sub">From Gelterkinden &amp; Basel to the Delaware Valley &mdash; 1710 to the present</p>
-  <div class="fleuron">&#10087;</div>
-</header>
-<nav class="chips" id="chips" aria-label="Filter by region"></nav>
-<main id="tree"></main>
-<footer>Primary source: <em>The Castor Family of Pennsylvania</em>, G. C. Martin, 1910 (archive.org/details/castorfamilyofpe1910mart). Entries marked &ldquo;family record&rdquo; come from the family&rsquo;s own notes and are not yet independently verified. Living persons show birth year only.</footer>
-<script>
-const SHOW_LIVING_DOB = false; // set true to show full birth dates of living people
-const REGIONS = {NJ:"South Jersey", PHL:"Philadelphia", WPA:"Western Pennsylvania", OH:"Ohio", CH:"Switzerland"};
-const FAM = "Family record", BK = "Martin, The Castor Family of Pennsylvania (1910)";
-// person: [name, born, died, note, fullBirthIfLiving]
-const DATA = [
-{era:"2017 \u2013 Present", reg:"NJ", place:"South Jersey", src:FAM, people:[
- ["James Wallace Steenland II","2017","","Son of James Wallace Steenland Sr. and Jessica Levering","2/1/2017"]]},
-{era:"1986 \u2013 Present", reg:"NJ", place:"South Jersey", src:FAM, note:"Children of William Thomas Steenland Sr. and Faith Plowman (never married).", people:[
- ["William Thomas Steenland Jr.","1986","","","7/21/1986"],
- ["James Wallace Steenland Sr.","1988","","Partner: Jessica Levering (b. 1986). Child: James Wallace Steenland II.","9/15/1988"]]},
-{era:"1962 \u2013 Present", reg:"NJ", place:"South Jersey / Philadelphia", star:1, src:FAM, note:"Children of June Castor. Birth father: William Thomas Plowman of Philadelphia. June later married Richard Steenland, and the children took his name.", people:[
- ["William Thomas Steenland Sr.","1962","","Partner: Faith Plowman (never married). Children: William Jr. and James Sr.","3/28/1962"],
- ["Barbara Steenland","","","Children: Taylor (now Taylor Ford), whose child is Harrison Ford; and Casey Steenland"],
- ["George Steenland","","",""]]},
-{era:"c. 1946 \u2013 Present", reg:"NJ", place:"Tuckahoe Road / South Jersey", src:FAM, people:[
- ["June Castor","c. 1946","","Parents: Wallace C. Castor and Gladys Harwas (Harwass). Mother of William, George and Barbara."],
- ["Eddie Castor","","","Brother of June"]]},
-{era:"c. 1917 \u2013 2000s", reg:"NJ", place:"Gloucester & Cumberland Counties, New Jersey", src:FAM, people:[
- ["Wallace C. Castor","c. 1917","","Children: June and Eddie"],
- ["Gladys Harwas (Harwass)","c. 1920","2000s","Spouse of Wallace; of Vineland and Willow Grove, NJ"],
- ["Edith R. Castor","Aug 31, 1919","Mar 15, 2000","Sister of Wallace; died at Newfield, Gloucester County"],
- ["Harry Maxwell Castor Jr.","Oct 25, 1932","Nov 10, 2006","Brother of Wallace; born Clayton, NJ; died Franklinville, NJ"]]},
-{era:"1892 \u2013 1970", reg:"PHL", place:"Bridesburg, Philadelphia \u2192 Gloucester County, NJ", src:FAM, people:[
- ["Harry Maxwell Castor Sr.","Jun 2, 1892","1970","Born Bridesburg, PA; died in NJ. Spouse: Lilly M. Jones (c. 1895 \u2013 1970s)."],
- ["Julia Mabel Castor","Mar 31, 1889","1980","Sister; born Philadelphia; buried Erial Cemetery, Camden County, NJ"],
- ["Louise E. Castor","1890","1968","Sister; Philadelphia"],
- ["Jennie Nealie Castor","1891","1891","Sister; Philadelphia"],
- ["Ethel Castor","1896","","Sister; born Philadelphia"],
- ["Sarah \u201cSadie\u201d L. Castor","1898","1947","Sister; buried Erial Cemetery, Camden County, NJ"],
- ["James Castor","1902","","Brother; born Philadelphia"]]},
-{era:"1865 \u2013 1946", reg:"WPA", place:"Jefferson Hills, PA \u2194 Bridesburg, Philadelphia \u2192 Union Township, Washington County, PA", src:FAM, people:[
- ["William Martin Castor","Oct 1, 1865","Mar 10, 1946","Born Jefferson Hills; lived in Bridesburg through the 1880s\u201390s; died Union Twp., Washington Co."],
- ["Martha \u201cMattie\u201d Ellen Furlong","c. 1868","1940s","Spouse; sister of James William, George Lockhart and Frederick Waters Furlong"]]},
-{era:"1833 \u2013 1918", reg:"OH", place:"Pittsburgh / Jefferson Hills, PA \u2192 Erie County, Ohio", src:FAM, people:[
- ["William Castor","Feb 1, 1833","Feb 11, 1918","Born Pittsburgh; died Erie County, OH. Raised his family in the Jefferson Hills / Union Township area."],
- ["His siblings","","","Susan, Nancy, Benjamin, Sarah Ann, Thomas George, Sampson, Rachael, Catherine, Margaret, Mary"]]},
-{era:"1810", reg:"WPA", place:"Pittsburgh, Allegheny County, Pennsylvania", src:FAM, note:"Married May 18, 1810, Trinity Episcopal Church, Pittsburgh. Twelve children raised along the Allegheny River corridor.", people:[
- ["Edward Castor","","","Parentage not yet established"],
- ["Catherine Margaret Snee","May 4, 1786","","Born in Ireland; daughter of Michael and Mary Ann Snee"]]},
-{gap:"Unproven link: no source yet ties Edward Castor of Pittsburgh to a son of Hans Georg Gerster. The 1910 book names no Western Pennsylvania branch. Leave open until a record is found."},
-{link:"branches.html", text:"The Frankford, Holmesburg &amp; Wissinoming branches, 1736\u20131910 &rarr;"},
-{era:"1736 \u2013 1810s", reg:"PHL", place:"Philadelphia \u2192 Germantown \u2192 Frankford (Oxford Township)", src:BK, note:"Eight children, all by his first wife.", people:[
- ["George","Dec 14, 1736","May 25, 1811","Born Philadelphia; farmer in Oxford Twp. Spouse: Margaretha Shuterle (m. 1765)."],
- ["Frederick","Apr 27, 1739","Aug 27, 1800","Lieutenant, Pennsylvania Militia; wounded at Brandywine. Inherited the Castor Road homestead."],
- ["Mary Elizabeth","","","Married Philip Cresman"],
- ["Jacob","1742","","Second Lieutenant, Bucks County Militia; farm on Oxford Road"],
- ["Veronica","bap. Dec 14, 1745","Aug 7, 1806","Never married"],
- ["Abraham","bap. Jul 4, 1747","","Married Elizabeth Hendricks, 1776"],
- ["Hannah","bap. 1749","","Married Jacob Snyder"],
- ["Sarah","Jun 8, 1751","Nov 8, 1800","Married Thomas Evanger Sr."]]},
-{era:"1710 \u2013 1797", reg:"PHL", place:"Philadelphia \u2192 Germantown \u2192 Oxford Township (Frankford)", src:BK, people:[
- ["Hans Georg Gerster (John George Castor)","Mar 5, 1710","Dec 29, 1797","Swiss emigrant; sailed on the Princess Augusta (Rotterdam via Cowes), took the oath at Philadelphia Sept 16, 1736. Bought a 202-acre plantation in Oxford Twp., Mar 10, 1762, with a sawmill on Tacony Creek; taxed among the wealthiest there in 1781. Founder of the Presbyterian Church of Frankford (1770)."],
- ["Eve (Eva) Gysin","c. 1710","Jul 1777","First wife; married 1735 and emigrated with him. Surname Gysin/Gisin per FamilySearch catalog; the 1910 book gives only \u201cEve\u201d."],
- ["Anna Maria Burghart","","","Second wife, married Dec 2, 1782, German Reformed Church, Philadelphia; survived him"]]},
-{era:"Before 1736", reg:"CH", place:"Basel region, Switzerland", src:BK, note:"Origin town is disputed in the sources: Basel (Rev. Thomas Murphy; Charles Deal), Berne (Rev. W. R. Scott), Gelterkinden (family tradition). The Gerster arms are recorded for Basel.", people:[
- ["Hans Gerster","late 1600s","","Father of Hans Georg; of Basel. Further generations not yet found."]]}
-];
-const tree = document.getElementById("tree"), chips = document.getElementById("chips");
-const esc = s => String(s).replace(/[&<>]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
-function person(p){
-  const b = (p[4] && SHOW_LIVING_DOB) ? p[4] : p[1], d = p[2];
-  const dates = (b || d) ? (b ? "b. " + b : "") + (d ? (b ? " \u2013 " : "") + "d. " + d : "") : "";
-  return '<div class="who"><span class="nm">' + esc(p[0]) + '</span>' + (dates ? '<span class="dt">' + esc(dates) + '</span>' : '') +
-    (p[3] ? '<span class="nt">' + esc(p[3]) + '</span>' : '') + '</div>';
-}
-DATA.forEach(e => {
-  const el = document.createElement(e.link ? "a" : "section");
-  if (e.gap) { el.className = "gap"; el.textContent = e.gap; }
-  else if (e.link) { el.className = "link"; el.href = e.link; el.innerHTML = e.text; }
-  else {
-    el.className = "node" + (e.star ? " star" : ""); el.dataset.reg = e.reg;
-    el.innerHTML = '<h2 class="era">' + esc(e.era) + '</h2><p class="place">' + esc(REGIONS[e.reg]) + " \u00b7 " + esc(e.place) + '</p>' +
-      (e.note ? '<p class="nt">' + esc(e.note) + '</p>' : '') + e.people.map(person).join("") +
-      '<div class="src">Source: ' + esc(e.src) + '</div>';
-  }
-  tree.appendChild(el);
-});
-let active = null;
-Object.entries(REGIONS).forEach(([k, v]) => {
-  const b = document.createElement("button"); b.className = "chip"; b.textContent = v;
-  b.onclick = () => {
-    active = active === k ? null : k;
-    [...chips.children].forEach(c => c.classList.toggle("on", c === b && active));
-    tree.querySelectorAll(".node").forEach(n => n.classList.toggle("dim", !!active && n.dataset.reg !== active));
-  };
-  chips.appendChild(b);
-});
-</script>
-</body>
-</html>
+</head><body>
+<a class="skip-link" href="#main-content">Skip to content</a>
+<header class="site-header"><div class="brand-lockup"><a class="crest" href="#home" aria-label="Castor Family Atlas home">C</a><div><a class="brand-name" href="#home">The Castor Family</a><span class="brand-kicker">A living record of family history</span></div></div>
+<button class="menu-toggle" id="menu-toggle" aria-expanded="false" aria-controls="primary-nav">Menu ☰</button>
+<nav class="primary-nav" id="primary-nav" aria-label="Main navigation"><a href="#home" data-page="home">Home</a><a href="#tree" data-page="tree">Family tree</a><a href="#marriages" data-page="marriages">Marriages</a><a href="#places" data-page="places">Places</a><a href="#timeline" data-page="timeline">Timeline</a><a href="#sources" data-page="sources">Sources &amp; method</a></nav></header>
+<main id="main-content">
+<section class="hero page-section active" id="home"><div class="hero-copy"><p class="eyebrow">Switzerland · Pennsylvania · New Jersey · Ohio</p><h1>One family.<br><em>Many branches.</em></h1><p class="hero-intro">Follow the Castor story across generations, marriages and places. Explore the people, discover the connections, and see where the evidence leads.</p><div class="hero-actions"><a class="button button-gold" href="#tree">Explore the family tree <span>↗</span></a><a class="text-link" href="#sources">How this history is documented</a></div><div class="hero-meta"><span><strong>1710</strong> earliest featured ancestor</span><span class="meta-rule"></span><span><strong>5</strong> geographic regions</span><span class="meta-rule"></span><span><strong>3</strong> evidence levels</span></div></div>
+<div class="hero-art"><div class="art-orbit orbit-one"></div><div class="art-orbit orbit-two"></div><svg viewBox="0 0 560 520" role="img" aria-label="Illustration of a branching family tree"><defs><linearGradient id="trunk" x1="0" x2="1"><stop stop-color="#9b7540"/><stop offset="1" stop-color="#d8bd83"/></linearGradient></defs><path d="M276 470 C260 390 295 330 275 265 C255 200 160 180 102 95 M277 270 C315 190 405 180 455 82 M270 338 C195 290 115 305 68 230 M284 340 C360 295 440 310 500 230 M274 270 C275 190 278 130 280 45" fill="none" stroke="url(#trunk)" stroke-width="7" stroke-linecap="round"/><g fill="#d6bd8b" stroke="#f0dfbd" stroke-width="3"><circle cx="102" cy="95" r="16"/><circle cx="455" cy="82" r="16"/><circle cx="68" cy="230" r="13"/><circle cx="500" cy="230" r="13"/><circle cx="280" cy="45" r="18"/><circle cx="276" cy="470" r="12"/></g><g fill="#f5e9d2" font-family="Georgia,serif" text-anchor="middle"><text x="280" y="22" font-size="12">GERSTER</text><text x="102" y="72" font-size="12">PHILADELPHIA</text><text x="455" y="58" font-size="12">PENNSYLVANIA</text><text x="68" y="208" font-size="12">SOUTH JERSEY</text><text x="500" y="208" font-size="12">OHIO</text></g></svg><div class="art-caption">✦ Tracing the family through time</div></div></section>
+<section class="intro-strip"><div><span class="strip-number">01</span><strong>People first</strong><p>Explore individuals and the relationships that connect them.</p></div><div><span class="strip-number">02</span><strong>Place matters</strong><p>Follow migration from the Basel region to the Delaware Valley.</p></div><div><span class="strip-number">03</span><strong>Evidence stays visible</strong><p>Documented facts and open questions are clearly distinguished.</p></div></section>
+<section class="content-section page-section" id="tree"><div class="section-heading"><div><p class="eyebrow">Explore the connections</p><h2>The family tree</h2><p class="section-lede">Move through the network, follow a marriage, or focus on a geographic branch. Select any person to open their record.</p></div><div class="section-mark">✳</div></div>
+<div class="tree-toolbar" role="toolbar" aria-label="Family tree controls"><label class="search-box"><span>⌕</span><input id="person-search" type="search" placeholder="Find a person…" autocomplete="off" aria-label="Search people"><kbd>/</kbd></label><label class="select-wrap"><span class="sr-only">Filter by region</span><select id="region-filter"><option value="all">All regions</option><option value="NJ">South Jersey</option><option value="PHL">Philadelphia</option><option value="WPA">Western Pennsylvania</option><option value="OH">Ohio</option><option value="CH">Switzerland</option></select></label><div class="toolbar-spacer"></div><button class="tool-button active" id="view-all" type="button">All links</button><button class="tool-button" id="view-marriage" type="button">Marriages</button><button class="tool-button" id="fit-tree" type="button">Fit view</button><button class="tool-button" id="reset-tree" type="button">Reset</button></div>
+<div class="tree-layout"><div class="graph-panel"><div class="graph-topline"><span><i class="live-dot"></i> Interactive family network</span><span class="graph-hint">Scroll to zoom · Drag to pan · Select a person</span></div><div id="family-graph" class="family-graph"><div class="graph-loading">Preparing the family connections…</div></div><div class="graph-legend"><span><i class="legend-line parent-line"></i> Parent / child</span><span><i class="legend-line spouse-line"></i> Spouse / partner</span><span><i class="legend-dot"></i> Person</span></div><div class="graph-mobile-hint">Drag the tree with one finger and pinch to zoom.</div></div><aside class="person-panel" id="person-panel" aria-live="polite"><div class="panel-empty"><span class="panel-icon">✳</span><p class="eyebrow">Your family archive</p><h3>Select a person</h3><p>Choose any name in the tree to see dates, places, family connections and source notes here.</p><button class="text-button" id="show-featured">Start with Hans Georg Gerster →</button></div></aside></div>
+<p class="evidence-note"><span class="evidence-key verified"></span> Published source <span class="evidence-key family"></span> Family record <span class="evidence-key open"></span> Open question</p></section>
+<section class="content-section alternate-section page-section" id="marriages"><div class="section-heading"><div><p class="eyebrow">Families joined together</p><h2>Marriage &amp; partnership index</h2><p class="section-lede">Explore the unions currently represented in the research. A marriage connection does not imply every spouse carried the Castor surname.</p></div><div class="section-mark">∞</div></div><div id="marriage-list" class="marriage-grid"></div></section>
+<section class="content-section page-section" id="places"><div class="section-heading"><div><p class="eyebrow">A family in motion</p><h2>Places &amp; migration</h2><p class="section-lede">Choose a region to highlight people and records associated with that place. Map markers are regional reference points, not precise ancestral addresses.</p></div><div class="section-mark">⌖</div></div><div class="places-layout"><div id="places-map" class="places-map"><div class="map-fallback">Regional map loading…</div></div><div id="place-cards" class="place-cards"></div></div></section>
+<section class="content-section alternate-section page-section" id="timeline"><div class="section-heading"><div><p class="eyebrow">Generations in context</p><h2>Historical timeline</h2><p class="section-lede">A chronological path through the dates and events preserved in the current family research.</p></div><div class="section-mark">⌛</div></div><div id="timeline-list" class="timeline-list"></div></section>
+<section class="content-section page-section" id="sources"><div class="section-heading"><div><p class="eyebrow">Research integrity</p><h2>Sources &amp; method</h2><p class="section-lede">The tree is a research project, not a claim that every connection has been proven. Source quality and uncertainty remain visible.</p></div><div class="section-mark">§</div></div>
+<div class="source-grid"><article class="source-card"><span class="source-number">01</span><h3>Primary published source</h3><p><em>The Castor Family of Pennsylvania</em>, G. C. Martin, 1910. The principal published source for the early Philadelphia family.</p><a href="https://archive.org/details/castorfamilyofpe1910mart" target="_blank" rel="noopener">Read the 1910 book at Internet Archive ↗</a></article><article class="source-card"><span class="source-number">02</span><h3>Family records</h3><p>Recent generations and several South Jersey details come from family notes. These entries are identified as family records and should be independently corroborated.</p><span class="source-status">Family record · verification ongoing</span></article><article class="source-card"><span class="source-number">03</span><h3>Unproven connections</h3><p>The relationship between Edward Castor of Pittsburgh and Hans Georg Gerster has not been established. The site deliberately leaves that link open.</p><span class="source-status">Open research question</span></article><article class="source-card"><span class="source-number">04</span><h3>Research standard</h3><p>Each person and relationship should carry a source citation, confidence level and research note. Do not infer parentage from proximity, surname or geography alone.</p><span class="source-status">Evidence-led genealogy</span></article></div>
+<div class="research-callout"><div><p class="eyebrow">A note on living people</p><h3>Respecting family privacy</h3><p>The previous site suppressed full birth dates for living people. This redesign continues that practice and displays year-only dates for living individuals where available.</p></div><span class="privacy-seal">PRIVATE<br>BY DESIGN</span></div></section>
+</main><footer class="site-footer"><div class="footer-main"><div><a class="brand-name" href="#home">The Castor Family</a><p>Preserving the people, places and stories behind the name.</p></div><nav aria-label="Footer navigation"><a href="#tree">Family tree</a><a href="#places">Places</a><a href="#timeline">Timeline</a><a href="#sources">Sources</a><a href="sitemap.xml">Site map</a></nav></div><div class="footer-bottom"><span>© <span id="year"></span> The Castor Family History Project</span><span>Research is ongoing · Corrections are welcome</span></div></footer>
+<script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script><script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"><script src="data.js"></script><script src="app.js"></script>
+</body></html>
