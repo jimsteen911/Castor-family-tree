@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Castor Family Tree</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=IM+Fell+English:ital@0;1&family=Pinyon+Script&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <div class="fleuron">&#10086; &#10086; &#10086;</div>
+  <h1>The Castor Family</h1>
+  <p class="sub">From Gelterkinden &amp; Basel to the Delaware Valley &mdash; 1710 to the present</p>
+  <div class="fleuron">&#10087;</div>
+</header>
+<nav class="chips" id="chips" aria-label="Filter by region"></nav>
+<main id="tree"></main>
+<footer>Primary source: <em>The Castor Family of Pennsylvania</em>, G. C. Martin, 1910 (archive.org/details/castorfamilyofpe1910mart). Entries marked &ldquo;family record&rdquo; come from the family&rsquo;s own notes and are not yet independently verified. Living persons show birth year only.</footer>
+<script>
+const SHOW_LIVING_DOB = false; // set true to show full birth dates of living people
+const REGIONS = {NJ:"South Jersey", PHL:"Philadelphia", WPA:"Western Pennsylvania", OH:"Ohio", CH:"Switzerland"};
+const FAM = "Family record", BK = "Martin, The Castor Family of Pennsylvania (1910)";
+// person: [name, born, died, note, fullBirthIfLiving]
+const DATA = [
+{era:"2017 \u2013 Present", reg:"NJ", place:"South Jersey", src:FAM, people:[
+ ["James Wallace Steenland II","2017","","Son of James Wallace Steenland Sr. and Jessica Levering","2/1/2017"]]},
+{era:"1986 \u2013 Present", reg:"NJ", place:"South Jersey", src:FAM, note:"Children of William Thomas Steenland Sr. and Faith Plowman (never married).", people:[
+ ["William Thomas Steenland Jr.","1986","","","7/21/1986"],
+ ["James Wallace Steenland Sr.","1988","","Partner: Jessica Levering (b. 1986). Child: James Wallace Steenland II.","9/15/1988"]]},
+{era:"1962 \u2013 Present", reg:"NJ", place:"South Jersey / Philadelphia", star:1, src:FAM, note:"Children of June Castor. Birth father: William Thomas Plowman of Philadelphia. June later married Richard Steenland, and the children took his name.", people:[
+ ["William Thomas Steenland Sr.","1962","","Partner: Faith Plowman (never married). Children: William Jr. and James Sr.","3/28/1962"],
+ ["Barbara Steenland","","","Children: Taylor (now Taylor Ford), whose child is Harrison Ford; and Casey Steenland"],
+ ["George Steenland","","",""]]},
+{era:"c. 1946 \u2013 Present", reg:"NJ", place:"Tuckahoe Road / South Jersey", src:FAM, people:[
+ ["June Castor","c. 1946","","Parents: Wallace C. Castor and Gladys Harwas (Harwass). Mother of William, George and Barbara."],
+ ["Eddie Castor","","","Brother of June"]]},
+{era:"c. 1917 \u2013 2000s", reg:"NJ", place:"Gloucester & Cumberland Counties, New Jersey", src:FAM, people:[
+ ["Wallace C. Castor","c. 1917","","Children: June and Eddie"],
+ ["Gladys Harwas (Harwass)","c. 1920","2000s","Spouse of Wallace; of Vineland and Willow Grove, NJ"],
+ ["Edith R. Castor","Aug 31, 1919","Mar 15, 2000","Sister of Wallace; died at Newfield, Gloucester County"],
+ ["Harry Maxwell Castor Jr.","Oct 25, 1932","Nov 10, 2006","Brother of Wallace; born Clayton, NJ; died Franklinville, NJ"]]},
+{era:"1892 \u2013 1970", reg:"PHL", place:"Bridesburg, Philadelphia \u2192 Gloucester County, NJ", src:FAM, people:[
+ ["Harry Maxwell Castor Sr.","Jun 2, 1892","1970","Born Bridesburg, PA; died in NJ. Spouse: Lilly M. Jones (c. 1895 \u2013 1970s)."],
+ ["Julia Mabel Castor","Mar 31, 1889","1980","Sister; born Philadelphia; buried Erial Cemetery, Camden County, NJ"],
+ ["Louise E. Castor","1890","1968","Sister; Philadelphia"],
+ ["Jennie Nealie Castor","1891","1891","Sister; Philadelphia"],
+ ["Ethel Castor","1896","","Sister; born Philadelphia"],
+ ["Sarah \u201cSadie\u201d L. Castor","1898","1947","Sister; buried Erial Cemetery, Camden County, NJ"],
+ ["James Castor","1902","","Brother; born Philadelphia"]]},
+{era:"1865 \u2013 1946", reg:"WPA", place:"Jefferson Hills, PA \u2194 Bridesburg, Philadelphia \u2192 Union Township, Washington County, PA", src:FAM, people:[
+ ["William Martin Castor","Oct 1, 1865","Mar 10, 1946","Born Jefferson Hills; lived in Bridesburg through the 1880s\u201390s; died Union Twp., Washington Co."],
+ ["Martha \u201cMattie\u201d Ellen Furlong","c. 1868","1940s","Spouse; sister of James William, George Lockhart and Frederick Waters Furlong"]]},
+{era:"1833 \u2013 1918", reg:"OH", place:"Pittsburgh / Jefferson Hills, PA \u2192 Erie County, Ohio", src:FAM, people:[
+ ["William Castor","Feb 1, 1833","Feb 11, 1918","Born Pittsburgh; died Erie County, OH. Raised his family in the Jefferson Hills / Union Township area."],
+ ["His siblings","","","Susan, Nancy, Benjamin, Sarah Ann, Thomas George, Sampson, Rachael, Catherine, Margaret, Mary"]]},
+{era:"1810", reg:"WPA", place:"Pittsburgh, Allegheny County, Pennsylvania", src:FAM, note:"Married May 18, 1810, Trinity Episcopal Church, Pittsburgh. Twelve children raised along the Allegheny River corridor.", people:[
+ ["Edward Castor","","","Parentage not yet established"],
+ ["Catherine Margaret Snee","May 4, 1786","","Born in Ireland; daughter of Michael and Mary Ann Snee"]]},
+{gap:"Unproven link: no source yet ties Edward Castor of Pittsburgh to a son of Hans Georg Gerster. The 1910 book names no Western Pennsylvania branch. Leave open until a record is found."},
+{link:"branches.html", text:"The Frankford, Holmesburg &amp; Wissinoming branches, 1736\u20131910 &rarr;"},
+{era:"1736 \u2013 1810s", reg:"PHL", place:"Philadelphia \u2192 Germantown \u2192 Frankford (Oxford Township)", src:BK, note:"Eight children, all by his first wife.", people:[
+ ["George","Dec 14, 1736","May 25, 1811","Born Philadelphia; farmer in Oxford Twp. Spouse: Margaretha Shuterle (m. 1765)."],
+ ["Frederick","Apr 27, 1739","Aug 27, 1800","Lieutenant, Pennsylvania Militia; wounded at Brandywine. Inherited the Castor Road homestead."],
+ ["Mary Elizabeth","","","Married Philip Cresman"],
+ ["Jacob","1742","","Second Lieutenant, Bucks County Militia; farm on Oxford Road"],
+ ["Veronica","bap. Dec 14, 1745","Aug 7, 1806","Never married"],
+ ["Abraham","bap. Jul 4, 1747","","Married Elizabeth Hendricks, 1776"],
+ ["Hannah","bap. 1749","","Married Jacob Snyder"],
+ ["Sarah","Jun 8, 1751","Nov 8, 1800","Married Thomas Evanger Sr."]]},
+{era:"1710 \u2013 1797", reg:"PHL", place:"Philadelphia \u2192 Germantown \u2192 Oxford Township (Frankford)", src:BK, people:[
+ ["Hans Georg Gerster (John George Castor)","Mar 5, 1710","Dec 29, 1797","Swiss emigrant; sailed on the Princess Augusta (Rotterdam via Cowes), took the oath at Philadelphia Sept 16, 1736. Bought a 202-acre plantation in Oxford Twp., Mar 10, 1762, with a sawmill on Tacony Creek; taxed among the wealthiest there in 1781. Founder of the Presbyterian Church of Frankford (1770)."],
+ ["Eve (Eva) Gysin","c. 1710","Jul 1777","First wife; married 1735 and emigrated with him. Surname Gysin/Gisin per FamilySearch catalog; the 1910 book gives only \u201cEve\u201d."],
+ ["Anna Maria Burghart","","","Second wife, married Dec 2, 1782, German Reformed Church, Philadelphia; survived him"]]},
+{era:"Before 1736", reg:"CH", place:"Basel region, Switzerland", src:BK, note:"Origin town is disputed in the sources: Basel (Rev. Thomas Murphy; Charles Deal), Berne (Rev. W. R. Scott), Gelterkinden (family tradition). The Gerster arms are recorded for Basel.", people:[
+ ["Hans Gerster","late 1600s","","Father of Hans Georg; of Basel. Further generations not yet found."]]}
+];
+const tree = document.getElementById("tree"), chips = document.getElementById("chips");
+const esc = s => String(s).replace(/[&<>]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+function person(p){
+  const b = (p[4] && SHOW_LIVING_DOB) ? p[4] : p[1], d = p[2];
+  const dates = (b || d) ? (b ? "b. " + b : "") + (d ? (b ? " \u2013 " : "") + "d. " + d : "") : "";
+  return '<div class="who"><span class="nm">' + esc(p[0]) + '</span>' + (dates ? '<span class="dt">' + esc(dates) + '</span>' : '') +
+    (p[3] ? '<span class="nt">' + esc(p[3]) + '</span>' : '') + '</div>';
+}
+DATA.forEach(e => {
+  const el = document.createElement(e.link ? "a" : "section");
+  if (e.gap) { el.className = "gap"; el.textContent = e.gap; }
+  else if (e.link) { el.className = "link"; el.href = e.link; el.innerHTML = e.text; }
+  else {
+    el.className = "node" + (e.star ? " star" : ""); el.dataset.reg = e.reg;
+    el.innerHTML = '<h2 class="era">' + esc(e.era) + '</h2><p class="place">' + esc(REGIONS[e.reg]) + " \u00b7 " + esc(e.place) + '</p>' +
+      (e.note ? '<p class="nt">' + esc(e.note) + '</p>' : '') + e.people.map(person).join("") +
+      '<div class="src">Source: ' + esc(e.src) + '</div>';
+  }
+  tree.appendChild(el);
+});
+let active = null;
+Object.entries(REGIONS).forEach(([k, v]) => {
+  const b = document.createElement("button"); b.className = "chip"; b.textContent = v;
+  b.onclick = () => {
+    active = active === k ? null : k;
+    [...chips.children].forEach(c => c.classList.toggle("on", c === b && active));
+    tree.querySelectorAll(".node").forEach(n => n.classList.toggle("dim", !!active && n.dataset.reg !== active));
+  };
+  chips.appendChild(b);
+});
+</script>
+</body>
+</html>

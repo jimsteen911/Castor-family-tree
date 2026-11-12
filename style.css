@@ -1,0 +1,42 @@
+:root{--ink:#2b1d10;--sepia:#6b4a2b;--gold:#a67c2e;--red:#7a1f1f;--paper:#f3e6c8;--paper2:#e8d3a6}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;color:var(--ink);font:19px/1.55 "IM Fell English","Cormorant Garamond",Georgia,serif;
+background:radial-gradient(ellipse at 50% 0,var(--paper) 0,var(--paper2) 70%,#d4b97f 100%) fixed}
+body::before{content:"";position:fixed;inset:8px;border:3px double var(--sepia);pointer-events:none;z-index:5;opacity:.55}
+header{text-align:center;padding:3.2rem 1rem 1rem}
+h1{font:400 clamp(3rem,11vw,6rem)/1 "Pinyon Script",cursive;color:var(--red);margin:0;text-shadow:1px 1px 0 #fff8}
+.sub{font:italic 1.15rem "Cormorant Garamond",serif;color:var(--sepia);margin:.4rem 0}
+.fleuron{color:var(--gold);font-size:1.6rem;letter-spacing:.6em;margin:.3rem 0}
+nav.chips{display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center;padding:.5rem 1rem 1.5rem}
+.chip{font:600 .95rem "Cormorant Garamond",serif;border:1px solid var(--sepia);background:#fff6;color:var(--ink);
+padding:.25rem .9rem;border-radius:2rem;cursor:pointer}
+.chip.on{background:var(--sepia);color:var(--paper)}
+main,.wrap{max-width:860px;margin:0 auto;padding:0 1.2rem 4rem;position:relative}
+main::before{content:"";position:absolute;left:50%;top:0;bottom:0;width:3px;transform:translateX(-50%);
+background:linear-gradient(var(--gold),var(--sepia) 20%,var(--sepia) 80%,var(--gold));opacity:.6}
+.node{position:relative;margin:0 0 2.4rem;padding:1.1rem 1.3rem 1rem;background:linear-gradient(#fbf1d6,#f0dfb4);
+border:1px solid var(--sepia);box-shadow:inset 0 0 0 4px #f6e9c6,inset 0 0 0 5px var(--gold),0 4px 14px #0003;
+transition:opacity .3s}
+.node.dim{opacity:.25}
+.node::before{content:"\2766";position:absolute;left:50%;top:-1.55rem;transform:translateX(-50%);color:var(--red);
+font-size:1.4rem;background:var(--paper);border-radius:50%;line-height:1;padding:0 .2rem}
+.node.star{border-color:var(--red);box-shadow:inset 0 0 0 4px #f6e9c6,inset 0 0 0 5px var(--red),0 4px 14px #0003}
+.era{font:400 2.1rem/1.1 "Pinyon Script",cursive;color:var(--red);margin:0}
+.place{font:italic 1rem "Cormorant Garamond",serif;color:var(--sepia);margin:.1rem 0 .6rem}
+.who{margin:.5rem 0;padding-left:.8rem;border-left:2px solid var(--gold)}
+.nm{font:400 1.55rem/1.15 "Alex Brush","Pinyon Script",cursive;color:var(--ink)}
+.dt{font:600 .95rem "Cormorant Garamond",serif;color:var(--sepia);margin-left:.4rem}
+.nt{display:block;font-size:.95rem;color:#4a3520}
+.src{font:italic .8rem "Cormorant Garamond",serif;color:var(--sepia);margin-top:.6rem;border-top:1px dotted var(--sepia);padding-top:.3rem}
+.gap{text-align:center;font:italic 1rem "Cormorant Garamond",serif;color:var(--red);margin:0 0 2.4rem;position:relative;
+background:var(--paper);border:1px dashed var(--red);padding:.7rem 1rem}
+a.link{display:block;text-align:center;font:400 1.7rem "Pinyon Script",cursive;color:var(--red);text-decoration:none;
+border:2px double var(--red);background:#fff4;padding:.8rem;margin:0 0 2.4rem;position:relative}
+a.link:hover{background:#fff9}
+a.back{color:var(--red);font:italic 1.1rem "Cormorant Garamond",serif}
+.wrap h2{font:400 2.6rem "Pinyon Script",cursive;color:var(--red);margin:2rem 0 .2rem}
+.wrap h3{font:400 1.5rem "Alex Brush",cursive;margin:1rem 0 .1rem}
+.wrap ul{margin:.2rem 0 .8rem;padding-left:1.2rem;font-size:.97rem}
+footer{text-align:center;font:italic .9rem "Cormorant Garamond",serif;color:var(--sepia);padding:0 1rem 3rem}
+@media(max-width:560px){body{font-size:17px}.node{padding:1rem .9rem}}
