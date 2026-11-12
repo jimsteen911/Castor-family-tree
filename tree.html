@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Castor Family Tree &ndash; Visual Tree</title>
+<link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=IM+Fell+English:ital@0;1&family=Pinyon+Script&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;height:100%;overflow:hidden;font:17px "IM Fell English",Georgia,serif;color:#2b1d10;background:radial-gradient(ellipse at 50% 30%,#f3e6c8,#e0c88f 75%,#c9a965)}
+#bar{position:fixed;top:0;left:0;right:0;z-index:3;padding:.4rem .8rem;display:flex;flex-wrap:wrap;gap:.4rem;align-items:center;background:#f3e6c8e8;border-bottom:2px double #6b4a2b}
+#bar h1{font:400 1.9rem "Pinyon Script",cursive;color:#7a1f1f;margin:0 .6rem 0 0}
+button,a.b{font:600 .95rem "Cormorant Garamond",serif;border:1px solid #6b4a2b;background:#fff7;color:#2b1d10;padding:.2rem .8rem;border-radius:2rem;cursor:pointer;text-decoration:none}
+button.on{background:#6b4a2b;color:#f3e6c8}
+#svg{position:fixed;inset:0;width:100%;height:100%;touch-action:none;cursor:grab}
+.nd rect{fill:#fbf1d6;stroke:#6b4a2b;stroke-width:1.5}.nd.stub rect{fill:#f3e6c8;stroke-dasharray:5 4;opacity:.85}
+.nd.sel rect{stroke:#7a1f1f;stroke-width:3}.nd{cursor:pointer;transition:opacity .25s}.nd.dim{opacity:.2}
+.nm{font:22px "Alex Brush","Pinyon Script",cursive;fill:#2b1d10}.dt{font:600 12px "Cormorant Garamond",serif;fill:#6b4a2b}
+.ln{fill:none;stroke:#6b4a2b;stroke-width:2}.ln.u{stroke-dasharray:6 5}.ln.q{stroke:#7a1f1f;stroke-dasharray:3 6}
+#info{position:fixed;left:.6rem;right:.6rem;bottom:.6rem;z-index:3;max-width:520px;background:#fbf1d6f2;border:1px solid #6b4a2b;box-shadow:inset 0 0 0 3px #f6e9c6,0 4px 14px #0004;padding:.6rem .9rem;display:none}
+#info b{font:400 1.6rem "Alex Brush",cursive}#info small{display:block;color:#6b4a2b}
+#zm{position:fixed;right:.6rem;bottom:.6rem;z-index:3;display:flex;flex-direction:column;gap:.3rem}
+</style></head><body>
+<div id="bar"><h1>The Castor Tree</h1><span id="chips"></span>
+<a class="b" href="index.html">List view</a><a class="b" href="branches.html">Frankford branches</a></div>
+<svg id="svg"><g id="g"></g></svg>
+<div id="zm"><button id="zi">+</button><button id="zo">&minus;</button><button id="zf">Fit all</button></div>
+<div id="info"></div>
+<script>
+const REG={NJ:["South Jersey","#3f6b4a"],PHL:["Philadelphia","#7a1f1f"],WPA:["Western PA","#3b5a82"],OH:["Ohio","#8a5a1e"],CH:["Switzerland","#6b3f7a"]};
+// [id, name, dates, region, x, row (0 = newest), note, stub?]
+const N=[
+["jw2","James Wallace Steenland II","b. 2017","NJ",2.5,0,"Son of James Wallace Steenland Sr. and Jessica Levering."],
+["har","Harrison Ford","","NJ",4.2,0,"Son of Taylor (Steenland) Ford."],
+["wtj","William Thomas Steenland Jr.","b. 1986","NJ",0,1,"Son of William Thomas Steenland Sr. and Faith Plowman."],
+["jws","James Wallace Steenland Sr.","b. 1988","NJ",2,1,"Partner of Jessica Levering. Son of William Sr."],
+["jes","Jessica Levering","b. 1986","NJ",3,1,"Partner of James Wallace Steenland Sr."],
+["tay","Taylor Steenland Ford","","NJ",4.2,1,"Daughter of Barbara Steenland; married, now Ford."],
+["cas","Casey Steenland","","NJ",5.2,1,"Child of Barbara Steenland."],
+["faith","Faith Plowman","","NJ",0,2,"Never married William Sr.; mother of William Jr. and James Sr."],
+["wts","William Thomas Steenland Sr.","b. 1962","NJ",1,2,"Born March 1962. Birth father William Thomas Plowman of Philadelphia; took stepfather Richard Steenland\u2019s surname."],
+["lev","Levering family","parents not yet found","NJ",3,2,"Family of Jessica Levering.",1],
+["bar","Barbara Steenland","","NJ",4.7,2,"Sister of William Sr.; mother of Taylor and Casey."],
+["geo","George Steenland","","NJ",6,2,"Brother of William Sr."],
+["plow","William Thomas Plowman","","PHL",1.7,3,"Of Philadelphia; birth father of William, George and Barbara. Not married to June."],
+["june","June Castor","b. c. 1946","NJ",2.7,3,"Of Tuckahoe Rd / South Jersey. Later married Richard Steenland."],
+["rich","Richard Steenland","","NJ",3.7,3,"Married June Castor; stepfather of her three children, who took his surname."],
+["eddie","Eddie Castor","","NJ",5.2,3,"Brother of June."],
+["edith","Edith R. Castor","1919 \u2013 2000","NJ",0.2,4,"Born Aug 31, 1919; died Mar 15, 2000, Newfield, Gloucester County."],
+["hmj","Harry Maxwell Castor Jr.","1932 \u2013 2006","NJ",1.2,4,"Born Oct 25, 1932, Clayton NJ; died Nov 10, 2006, Franklinville NJ."],
+["wal","Wallace C. Castor","c. 1917","NJ",3.2,4,"Gloucester & Cumberland Counties, NJ. Children: June and Eddie."],
+["gla","Gladys Harwas","c. 1920 \u2013 2000s","NJ",4.2,4,"Also spelled Harwass; of Vineland and Willow Grove, NJ."],
+["harw","Harwas family","parents not yet found","NJ",4.2,5,"Family of Gladys Harwas (Harwass).",1],
+["hsr","Harry Maxwell Castor Sr.","1892 \u2013 1970","PHL",1.2,5,"Born Jun 2, 1892, Bridesburg, Philadelphia; died NJ. Sisters Julia Mabel (1889\u20131980), Louise E. (1890\u20131968), Jennie Nealie (1891), Ethel (b. 1896), Sarah \u201cSadie\u201d L. (1898\u20131947); brother James (b. 1902)."],
+["lil","Lilly M. Jones","c. 1895 \u2013 1970s","PHL",2.2,5,"Wife of Harry Maxwell Castor Sr."],
+["jones","Jones family","parents not yet found","PHL",3.2,6,"Family of Lilly M. Jones.",1],
+["wmc","William Martin Castor","1865 \u2013 1946","WPA",0.7,6,"Born Oct 1, 1865, Jefferson Hills PA; lived in Bridesburg in the 1880s\u201390s; died Mar 10, 1946, Union Twp., Washington Co. PA."],
+["mat","Martha \u201cMattie\u201d Ellen Furlong","c. 1868 \u2013 1940s","WPA",1.7,6,"Wife of William Martin Castor."],
+["furl","Furlong family","brothers known","WPA",1.7,7,"Mattie\u2019s brothers: James William, George Lockhart, Frederick Waters Furlong. Parents not yet found.",1],
+["wc","William Castor","1833 \u2013 1918","OH",0.7,7,"Born Feb 1, 1833, Pittsburgh; died Feb 11, 1918, Erie County, OH. Siblings: Susan, Nancy, Benjamin, Sarah Ann, Thomas George, Sampson, Rachael, Catherine, Margaret, Mary."],
+["edw","Edward Castor","m. 1810","WPA",0.2,8,"Pittsburgh, Allegheny County. Married May 18, 1810, Trinity Episcopal Church. Twelve children."],
+["cat","Catherine Margaret Snee","b. 1786 Ireland","WPA",1.2,8,"Born May 4, 1786 in Ireland."],
+["edp","Parents of Edward","not yet established","WPA",0.2,9,"No source yet names Edward\u2019s parents.",1],
+["snee","Michael & Mary Ann Snee","parents of Catherine","WPA",1.2,9,"Parents of Catherine Margaret Snee."],
+["sons","Sons of Hans Georg","George, Frederick, Jacob + 5","PHL",0.2,10,"Frankford branches. Dashed red line: possible link to Edward Castor, UNPROVEN. See Frankford branches page.",1],
+["eva","Eva Gysin","c. 1710 \u2013 1777","PHL",-0.3,11,"First wife; married 1735; arrived Philadelphia 1736."],
+["hg","Hans Georg Gerster","1710 \u2013 1797","PHL",0.7,11,"Swiss linen weaver; arrived Philadelphia 1736 (Princess Augusta). 202-acre plantation in Oxford Twp. (1762). Founded the Frankford Presbyterian Church, 1770."],
+["anna","Anna Maria Burghart","m. 1782","PHL",1.7,11,"Second wife."],
+["gers","Hans Gerster","of Basel","CH",0.2,12,"Father of Hans Georg. Origin town disputed: Basel, Berne or Gelterkinden.",1]
+];
+const S=[["jws","jes"],["wts","faith","u"],["june","plow","u"],["june","rich"],["wal","gla"],["hsr","lil"],["wmc","mat"],["edw","cat"],["hg","eva"],["hg","anna"]];
+const D=[["jws+jes",["jw2"]],["wts+faith",["wtj","jws"]],["lev",["jes"]],["june",["wts","bar","geo"]],["bar",["tay","cas"]],["tay",["har"]],
+["wal+gla",["june","eddie"]],["harw",["gla"]],["hsr+lil",["edith","hmj","wal"]],["jones",["lil"]],["wmc+mat",["hsr"]],["furl",["mat"]],
+["wc",["wmc"]],["edw+cat",["wc"]],["snee",["cat"]],["edp",["edw"]],["sons",["edp"],1],["hg+eva",["sons"]],["gers",["hg"]]];
+const NS="http://www.w3.org/2000/svg",W=190,H=62,SX=235,SY=135,OX=2,M={};
+const g=document.getElementById("g"),svg=document.getElementById("svg"),info=document.getElementById("info");
+const el=(t,a,p)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);(p||g).appendChild(e);return e};
+N.forEach(n=>{M[n[0]]={x:(n[4]+OX)*SX,y:n[5]*SY+110}});
+const pos=k=>{const q=k.split("+").map(i=>M[i]);return{x:q.reduce((a,b)=>a+b.x,0)/q.length,y:q[0].y}};
+S.forEach(([a,b,t])=>{const A=M[a],B=M[b];el("path",{class:"ln"+(t?" u":""),d:`M${A.x+W/2*Math.sign(B.x-A.x)} ${A.y}H${B.x-W/2*Math.sign(B.x-A.x)}`})});
+D.forEach(([p,cs,q])=>{const P=pos(p),top=P.y-H/2;cs.forEach(c=>{const C=M[c],by=C.y+H/2,my=(top+by)/2;
+ el("path",{class:"ln"+(q?" q":""),d:`M${P.x} ${top}V${my}H${C.x}V${by}`})})});
+const nodes=N.map(n=>{const b=el("g",{class:"nd"+(n[7]?" stub":""),transform:`translate(${M[n[0]].x-W/2} ${M[n[0]].y-H/2})`});b.dataset.r=n[3];
+ el("rect",{width:W,height:H,rx:6},b);el("rect",{x:0,y:0,width:6,height:H,fill:REG[n[3]][1],rx:3},b).style.stroke="none";
+ const t=el("text",{class:"nm",x:W/2+2,y:26,"text-anchor":"middle"},b);t.textContent=n[1];
+ t.setAttribute("font-size",n[1].length>28?12:n[1].length>22?14:n[1].length>17?16:19);
+ el("text",{class:"dt",x:W/2+2,y:47,"text-anchor":"middle"},b).textContent=n[2];
+ b.onclick=e=>{if(moved)return;nodes.forEach(x=>x.classList.remove("sel"));b.classList.add("sel");
+  info.style.display="block";info.innerHTML=`<b>${n[1]}</b><small>${n[2]} \u00b7 ${REG[n[3]][0]}${n[7]?" \u00b7 research stub":""}</small>${n[6]}`};return b});
+// region filter
+const chips=document.getElementById("chips");let act=null;
+["ALL",...Object.keys(REG)].forEach(k=>{const b=document.createElement("button");b.textContent=k=="ALL"?"All":REG[k][0];if(k=="ALL")b.className="on";
+ b.onclick=()=>{act=k=="ALL"?null:k;[...chips.children].forEach(c=>c.classList.toggle("on",c===b));nodes.forEach(n=>n.classList.toggle("dim",!!act&&n.dataset.r!==act))};chips.appendChild(b)});
+// pan / zoom
+let T={k:1,x:0,y:0},moved=false;const ap=()=>g.setAttribute("transform",`translate(${T.x} ${T.y}) scale(${T.k})`);
+function zoom(f,cx,cy){const k=Math.min(3,Math.max(.12,T.k*f)),r=k/T.k;T.x=cx-(cx-T.x)*r;T.y=cy-(cy-T.y)*r;T.k=k;ap()}
+function fit(){const b=g.getBBox(),w=innerWidth,h=innerHeight-50,k=Math.min(w/(b.width+80),h/(b.height+80));T={k,x:(w-b.width*k)/2-b.x*k,y:50+(h-b.height*k)/2-b.y*k};ap()}
+const P=new Map();let last=0;
+svg.onpointerdown=e=>{P.set(e.pointerId,e);moved=false;last=0};
+svg.onpointermove=e=>{if(!P.has(e.pointerId))return;const o=P.get(e.pointerId);P.set(e.pointerId,e);
+ if(P.size==1){const dx=e.clientX-o.clientX,dy=e.clientY-o.clientY;if(Math.abs(dx)+Math.abs(dy)>0){T.x+=dx;T.y+=dy;ap();if(!moved)svg.setPointerCapture(e.pointerId);moved=true}}
+ else if(P.size==2){const[a,b]=[...P.values()],d=Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY);if(last)zoom(d/last,(a.clientX+b.clientX)/2,(a.clientY+b.clientY)/2);last=d;moved=true}};
+svg.onpointerup=svg.onpointercancel=e=>{P.delete(e.pointerId);last=0;setTimeout(()=>moved=false,50)};
+svg.onwheel=e=>{e.preventDefault();zoom(e.deltaY<0?1.15:1/1.15,e.clientX,e.clientY)};
+zi.onclick=()=>zoom(1.3,innerWidth/2,innerHeight/2);zo.onclick=()=>zoom(1/1.3,innerWidth/2,innerHeight/2);zf.onclick=fit;
+svg.addEventListener("click",e=>{if(e.target===svg&&!moved){info.style.display="none";nodes.forEach(x=>x.classList.remove("sel"))}});
+document.fonts.ready.then(fit);fit();addEventListener("resize",fit);
+</script></body></html>

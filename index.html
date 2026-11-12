@@ -17,6 +17,7 @@
   <div class="fleuron">&#10087;</div>
 </header>
 <nav class="chips" id="chips" aria-label="Filter by region"></nav>
+<p style="text-align:center;margin:0 0 1rem"><a class="back" href="tree.html">Open the zoomable visual tree &rarr;</a></p>
 <main id="tree"></main>
 <footer>Primary source: <em>The Castor Family of Pennsylvania</em>, G. C. Martin, 1910 (archive.org/details/castorfamilyofpe1910mart). Entries marked &ldquo;family record&rdquo; come from the family&rsquo;s own notes and are not yet independently verified. Living persons show birth year only.</footer>
 <script>
@@ -98,15 +99,19 @@ DATA.forEach(e => {
   tree.appendChild(el);
 });
 let active = null;
-Object.entries(REGIONS).forEach(([k, v]) => {
-  const b = document.createElement("button"); b.className = "chip"; b.textContent = v;
-  b.onclick = () => {
-    active = active === k ? null : k;
-    [...chips.children].forEach(c => c.classList.toggle("on", c === b && active));
-    tree.querySelectorAll(".node").forEach(n => n.classList.toggle("dim", !!active && n.dataset.reg !== active));
-  };
+const setR = k => {
+  active = k;
+  [...chips.children].forEach(c => c.classList.toggle("on", c.dataset.k === (k || "ALL")));
+  tree.querySelectorAll(".node").forEach(n => { n.style.display = (!k || n.dataset.reg === k) ? "" : "none"; });
+  window.scrollTo({top: 0, behavior: "smooth"});
+};
+[["ALL", "All regions"], ...Object.entries(REGIONS)].forEach(([k, v]) => {
+  const b = document.createElement("button"); b.className = "chip" + (k === "ALL" ? " on" : ""); b.dataset.k = k; b.textContent = v;
+  b.onclick = () => setR(k === "ALL" || active === k ? null : k);
   chips.appendChild(b);
 });
+const topBtn = document.createElement("button"); topBtn.className = "chip"; topBtn.textContent = "\u2191 Top";
+topBtn.style.cssText = "position:fixed;right:14px;bottom:14px;z-index:9"; topBtn.onclick = () => scrollTo({top: 0, behavior: "smooth"}); document.body.appendChild(topBtn);
 </script>
 </body>
 </html>
