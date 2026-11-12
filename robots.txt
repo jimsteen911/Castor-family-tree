@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://jimsteen911.github.io/Castor-family-tree/sitemap.xml
