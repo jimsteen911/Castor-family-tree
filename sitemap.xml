@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-<url><loc>https://jimsteen911.github.io/Castor-family-tree/</loc></url>
-<url><loc>https://jimsteen911.github.io/Castor-family-tree/#tree</loc></url>
-<url><loc>https://jimsteen911.github.io/Castor-family-tree/#marriages</loc></url>
-<url><loc>https://jimsteen911.github.io/Castor-family-tree/#places</loc></url>
-<url><loc>https://jimsteen911.github.io/Castor-family-tree/#timeline</loc></url>
-<url><loc>https://jimsteen911.github.io/Castor-family-tree/#sources</loc></url>
+  <url><loc>https://jimsteen911.github.io/Castor-family-tree/</loc></url>
+  <url><loc>https://jimsteen911.github.io/Castor-family-tree/sitemap.html</loc></url>
 </urlset>
